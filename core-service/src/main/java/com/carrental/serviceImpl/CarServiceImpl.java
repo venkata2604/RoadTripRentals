@@ -101,7 +101,13 @@ public class CarServiceImpl implements CarService {
         savedCarEntity.setDescription(updatedCarDto.getDescription());
         savedCarEntity.setStatus(updatedCarDto.getStatus());
 
-        if(updatedCarDto.getOwnerId() != 0){
+        Long ownerId = updatedCarDto.getOwnerId();
+        if(ownerId == null){
+            updatedCarDto.setOwnerId(0L);
+        }
+
+
+        if(updatedCarDto.getOwnerId() != null && updatedCarDto.getOwnerId() != 0L){
             if(updatedCarDto.getStatus().equals("Approved")){
                 savedCarEntity.setApprovedDate(LocalDate.now());
             }
@@ -113,6 +119,8 @@ public class CarServiceImpl implements CarService {
                 savedCarEntity.setOwnerBalance(totalAmount);
             }
         }
+
+        if(savedCarEntity.getOwnerId() == null) savedCarEntity.setOwnerId(0L);
 
         savedCarEntity.setCarId(id);
 
@@ -152,7 +160,9 @@ public class CarServiceImpl implements CarService {
             branchManagerEntity.ifPresent(managerEntity -> carDto.setBranchManagerName(managerEntity.getName()));
         }
 
-        if(entity.getOwnerId() != null && entity.getOwnerId() != 0){
+        if(entity.getOwnerId() == null) entity.setOwnerId(0L);
+
+        if(entity.getOwnerId() != 0){
             Optional<CarOwnerEntity> carOwnerEntity = carOwnerRepository.findById(entity.getOwnerId());
             if (carOwnerEntity.isPresent()) {
                 CarOwnerEntity carOwner = carOwnerEntity.get();

@@ -7,7 +7,6 @@ import com.carrental.repository.CarOwnerRepository;
 import com.carrental.service.CarOwnerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +21,6 @@ public class CarOwnerServiceImpl implements CarOwnerService {
 
     @Autowired
     private ModelMapper modelMapper;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<CarOwnerDto> getCarOwners() {
@@ -59,7 +55,7 @@ public class CarOwnerServiceImpl implements CarOwnerService {
             carOwnerEntity.setLastName(updatedCarOwnerDto.getLastName());
             carOwnerEntity.setEmail(updatedCarOwnerDto.getEmail());
             if (updatedCarOwnerDto.getPassword() != null && !updatedCarOwnerDto.getPassword().isEmpty()) {
-                carOwnerEntity.setPassword(passwordEncoder.encode(updatedCarOwnerDto.getPassword()));
+                carOwnerEntity.setPassword(updatedCarOwnerDto.getPassword());
             }
             // Assuming address fields are part of the CarOwnerEntity
             carOwnerEntity.setStreetAddress(updatedCarOwnerDto.getStreetAddress());
